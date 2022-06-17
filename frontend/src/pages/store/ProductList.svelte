@@ -23,8 +23,8 @@ import { onMount } from "svelte/internal";
 
 
 <div class="product-list">
-    {#each products as { id, name, image_file, creator_id, price }}
-        <ProductCard {id} {name} {image_file} {creator_id} {price}/>
+    {#each products as { id, productName, productImage, authorName, price }}
+        <ProductCard {id} {productName} {productImage} {authorName} {price}/>
     {/each}
 </div>
 
