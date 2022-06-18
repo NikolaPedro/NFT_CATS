@@ -15,7 +15,7 @@
             <Link>
                 <Button type="accent" size="medium" text="Upload"/>
             </Link>
-            <Link>
+            <Link to="reg">
                 <Button type="light" size="medium" text="Account"/>
             </Link>
         </div>
