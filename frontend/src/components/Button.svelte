@@ -16,7 +16,7 @@
 
     .big {
         font-size: 16px;
-        padding: 14px 24px;
+        padding: 12px 30px;
     }
 
     .medium {
