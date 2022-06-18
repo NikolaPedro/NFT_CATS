@@ -1,5 +1,5 @@
 <script>
-    import { API_HOST } from "../../api.js";
+    import { API_HOST } from "../../utils/api.js"
     import { onMount } from "svelte/internal";
     import ProductCard from "./ProductCard.svelte";
 
@@ -8,8 +8,17 @@
     let products = [];
 
     onMount(async () => {
-        const res = await fetch(`${API_HOST}/store?page=${pageNumber}`);
-        products = await res.json();
+        try {
+            const res = await fetch(`${API_HOST}/store?page=${pageNumber}`);
+            products = await res.json();
+        } catch (error) {
+            products = [
+                { id: 0, productName: "BEER", productImage: "", authorName: "Pedro", price: 75.7},
+                { id: 1, productName: "VODKA", productImage: "", authorName: "Pedro", price: 34.2},
+                { id: 2, productName: "GAYBOY", productImage: "", authorName: "Roma", price: 332.99}
+            ];
+        }
+        
     });
 </script>
 
