@@ -18,11 +18,14 @@
     let login = async () => {
         error = validate(form);
         if (error == "") {
+
             const responce = await fetch(`${API_HOST}/registration`, {
                 method: 'POST', 
                 headers: { 
-                    'Content-Type' : 'application/json'
+                    'Content-Type' : 
+                    'application/json'
                 },
+
                 body: JSON.stringify(form)
             });
             alert('gsdgsd');
