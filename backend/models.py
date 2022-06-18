@@ -1,8 +1,10 @@
 from datetime import datetime
 from xml.dom import ValidationErr
+from flask import jsonify
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask_login import UserMixin
 from dataclasses import dataclass
+from sqlalchemy import false, true
 from werkzeug.security import generate_password_hash, check_password_hash
 from App import db, app
 
@@ -14,7 +16,6 @@ class User(db.Model, UserMixin):
     password : str = db.Column(db.String(150), nullable = False)
     image_file : str = db.Column(db.String(30), nullable = False, default = 'default.jpg')
     general_information : str = db.Column(db.String(200), nullable = True)
-
 
     def get_reset_token(self, expires_sec=300):
         s = Serializer(app.config['SECRET_KEY'], expires_sec)
@@ -28,6 +29,20 @@ class User(db.Model, UserMixin):
         except:
             return None
         return User.query.get(user_id)
+
+
+    def check_email(email):
+        if(User.query.filter_by(email = email).first()):
+            return true
+        else:
+            return false
+
+
+    def check_username(username):
+        if(User.query.filter_by(username = username).first()):
+            return true
+        else:
+            return false
 
 
     def set_password(self, password):
@@ -46,12 +61,13 @@ class User(db.Model, UserMixin):
 @dataclass
 class NFT(db.Model):
     id : int = db.Column(db.Integer, primary_key = True)
-    image_file : str = db.Column(db.String(50), nullable = True)
-    name : str = db.Column(db.String(50), nullable = False, unique = True)
+    productImage : str = db.Column(db.String(50), nullable = True)
+    productName : str = db.Column(db.String(50), nullable = False, unique = True)
     description : str = db.Column(db.Text, nullable = False)
     price : float = db.Column(db.Float(30), nullable = False)
     date_creator : int = db.Column(db.DateTime, nullable = False, default = datetime.utcnow)
-    creator_id : int = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-    owner_id : int = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-    creator = db.relationship("User", foreign_keys = [creator_id], backref = 'creator', lazy = True)
-    owner = db.relationship("User", foreign_keys = [owner_id], backref = 'owner', lazy = True)
+    authorName_id : int = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
+    ownerName_id : int = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
+    authorName = db.relationship("User", foreign_keys = [authorName_id], backref = 'creator', lazy = True)
+    ownerName = db.relationship("User", foreign_keys = [ownerName_id], backref = 'owner', lazy = True)
+

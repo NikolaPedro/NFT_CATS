@@ -1,3 +1,4 @@
+from turtle import done
 from flask import flash, redirect, render_template, request, url_for, jsonify
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
@@ -38,6 +39,21 @@ def login():
     return render_template('login.html', form_login = form)
 
 
+@app.route("/registration", methods = ['POST'])
+def json_register():
+    request_data = request.get_json()
+    new_user = User(email = request_data['email'], username = request_data['login'])
+    new_user.set_password(request_data['password'])
+    new_user.check_password(request_data['repeatPassword'])
+    if(new_user.check_email(request_data['email']) == False):
+        return jsonify({"answer" : "emailError"})
+    if(new_user.check_username(request_data['username']) == False):
+        return jsonify({"answer" : "loginError"})
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({"answer" : "done"})
+
+
 @app.route("/register", methods = ['POST', 'GET'])
 def register():
     form = RegisterForm()
@@ -64,7 +80,7 @@ def get_current():
 @app.route("/store")
 def shop():
     page = request.args.get('page', 1, type = int)
-    nfts = NFT.query.all()[(page-1) * 32: page * 32]
+    nfts = NFT.query.all()[(page-1) * 2: page * 2]
     return jsonify(nfts)
     ##nfts = NFT.query.order_by(NFT.date_creator.desc()).paginate(page = page, per_page = 1)
     ##return render_template('store.html', nfts = nfts)
@@ -181,5 +197,10 @@ def reset_token(token):
         return redirect(url_for('login'))
     return render_template('reset_token.html', title = 'Reset Password', form_reset_token = form)
 
+
+# aboba9 = NFT(productImage = "polindsffdska.jpg", productName = "cavxctewt", description = "fdgfdsyergsd", price = "0.545", authorName_id = "1", ownerName_id = "1")
+
+# db.session.add(aboba9)
+# db.session.commit()
 if __name__ == '__main__':
     app.run(debug=True)

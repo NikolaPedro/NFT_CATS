@@ -2,6 +2,7 @@
     import { navigate } from "svelte-routing";
     import Button from "../../components/Button.svelte";
     import validate from "../../utils/validation.js";
+    import { API_HOST } from "../../utils/api.js";
 
     const maxlength = 30;
 
@@ -17,10 +18,14 @@
     let login = async () => {
         error = validate(form);
         if (error == "") {
-            const responce = fetch(`${API_HOST}/reg`, {
-                method: 'POST',
+            const responce = await fetch(`${API_HOST}/registration`, {
+                method: 'POST', 
+                headers: { 
+                    'Content-Type' : 'application/json'
+                },
                 body: JSON.stringify(form)
             });
+            alert('gsdgsd');
             const answer = await responce.json();
             alert(JSON.stringify(answer));
             navigate("/");
