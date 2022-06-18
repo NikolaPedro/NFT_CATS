@@ -2,9 +2,9 @@
     import { Link } from "svelte-routing";
 
     export let id = 0;
-    export let name = "productName";
-    export let image_file = "";
-    export let creator_id = "authorName";
+    export let productName = "productName";
+    export let productImage = "";
+    export let authorName = "authorName";
     // export let authorImage = "";
     export let price = 999;
 </script>
@@ -16,8 +16,8 @@
         <!-- <img src={image_file} alt=""> -->
         <div class="info">
             <div class="names">
-                <div class="product-name">{name}</div>
-                <div class="author-name">{creator_id}</div>
+                <div class="product-name">{productName}</div>
+                <div class="author-name">{authorName}</div>
             </div>
             <div class="price">{price}</div>
         </div>

@@ -2,21 +2,23 @@
     export let type = "light";
     export let size = "medium";
     export let text = "button";
+    export let action;
 </script>
 
 
-<div class={type + " " + size}>{text}</div>
+<button class={type + " " + size} on:click|preventDefault={action}>{text}</button>
 
 
 <style>
-    div {
+    button {
         border-radius: 100px;
         font-weight: 700;
+        text-align: center;
     }
 
     .big {
         font-size: 16px;
-        padding: 14px 24px;
+        padding: 12px 30px;
     }
 
     .medium {

@@ -2,7 +2,7 @@
 
 # Create environment
 
-Install in the project folder
+Install in the project folder backend
 
 # linux
 ```bash 
@@ -23,7 +23,52 @@ py -3 -m venv .venv
 .venv\scripts\activate
 ```
 
-Choose an interpreter in your development environment.Do python
+Choose an interpreter in your development environment.
+
+Do python
 ```bash 
 -m pip install --upgrade pip
+```
+# Installing libraries backend
+
+Now install the following libraries to work with backendom
+
+```bash
+python -m pip install flask
+python -m pip install flask-sqlalchemy
+python -m pip install flask-login     
+python -m pip install flask-mail
+python -m pip install flask-wtf
+pip uninstall itsdangerous
+pip install itsdangerous==2.0.0
+pip install email_validator
+pip install mysqlclient
+```
+
+# Launch backend
+
+To run backend in an activated environment, write this command:
+
+```bash
+python main.py
+```
+
+Install in the project folder frontend
+
+https://nodejs.org/ru/download/package-manager/#debian-and-ubuntu-based-linux-distributions-enterprise-linux-fedora-and-snap-packages
+
+# Installing libraries frontend
+
+To install frontend write the command:
+
+```bash
+npm install
+```
+
+# Launch frontend
+
+To run frontend in an activated environment, write this command:
+
+```bash
+npm run def
 ```

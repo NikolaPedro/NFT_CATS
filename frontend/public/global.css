@@ -21,6 +21,8 @@
     text-decoration: none;
     padding: 0;
     margin: 0;
+    background: transparent;
+    border: none;
 }
 
 *:focus {
@@ -30,4 +32,8 @@
 body {
     background-color: var(--color-neutral-1);
     padding: 0px 10px;
+}
+
+button {
+    cursor: pointer;
 }
