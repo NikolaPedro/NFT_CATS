@@ -1,21 +1,19 @@
 <script>
-    import { Link } from "svelte-routing";
+    import { navigate } from "svelte-routing";
     import Button from "../../components/Button.svelte";
-    
+
+    let login = "";
+    let password = "";
     let maxlength = 30;
 </script>
 
 
 <div class="container">
     <form>
-        <input type="text" placeholder="Login" {maxlength}>
-        <input type="password" placeholder="Password" {maxlength}>
-        <Link to="reg">
-            <div class="auth-button">Don't have an account?</div>
-        </Link>
-        <Link to="/">
-            <Button type="accent" size="big" text="Login" />
-        </Link>
+        <input type="text" placeholder="Login" {maxlength} bind:value={login}>
+        <input type="password" placeholder="Password" {maxlength} bind:value={password}>
+        <button class="auth-button" on:click={() => navigate("/reg")}>Don't have an account?</button>
+        <Button type="accent" size="big" text="Login" action={() => navigate("/")} />
     </form>
 </div>
 
