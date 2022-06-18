@@ -1,23 +1,36 @@
 <script>
-    import { Link } from "svelte-routing";
+    import { navigate } from "svelte-routing";
     import Button from "../../components/Button.svelte";
-    
-    let maxlength = 30;
+    import validate from "../../utils/validation.js";
+
+    const maxlength = 30;
+
+    let error = "";
+    let form = {
+        login: "",
+        email: "",
+        password: "",
+        repeatPassword: ""
+    };
+
+    let login = () => {
+        error = validate(form);
+        if (error == "") {
+            navigate("/");
+        }
+    }
 </script>
 
 
 <div class="container">
     <form>
-        <input type="text" placeholder="Login" {maxlength}>
-        <input type="email" placeholder="Email" {maxlength}>
-        <input type="password" placeholder="Password" {maxlength}>
-        <input type="password" placeholder="Repeat password" {maxlength}>
-        <Link to="auth">
-            <div class="auth-button">Already have an account?</div>
-        </Link>
-        <Link to="/">
-            <Button type="accent" size="big" text="Sing up" />
-        </Link>
+        <div class="error">{error}</div>
+        <input type="text" placeholder="Login" {maxlength} bind:value={form.login}>
+        <input type="email" placeholder="Email" {maxlength} bind:value={form.email}>
+        <input type="password" placeholder="Password" {maxlength} bind:value={form.password}>
+        <input type="password" placeholder="Repeat password" {maxlength} bind:value={form.repeatPassword}>
+        <button class="auth-button" on:click={() => navigate("/auth")}>Already have an account?</button>
+        <Button type="accent" size="big" text="Sing up" action={login}/>
     </form>
 </div>
 
@@ -60,5 +73,12 @@
     
     .auth-button:hover {
         color: var(--color-primary);
+    }
+
+    .error {
+        margin: 10px;
+        color: var(--color-error);
+        font-size: 16px;
+        font-weight: 500;
     }
 </style>
