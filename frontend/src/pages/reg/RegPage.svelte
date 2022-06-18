@@ -12,14 +12,17 @@
         password: "",
         repeatPassword: ""
     };
+    let answer = []
 
-    let login = () => {
+    let login = async () => {
         error = validate(form);
         if (error == "") {
-            let responce = fetch(`${API_HOST}/reg`, {
+            const responce = fetch(`${API_HOST}/reg`, {
                 method: 'POST',
                 body: JSON.stringify(form)
             });
+            const answer = await responce.json();
+            alert(JSON.stringify(answer));
             navigate("/");
         }
     }
