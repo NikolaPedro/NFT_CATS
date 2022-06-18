@@ -17,7 +17,7 @@
     let login = async () => {
         error = validate(form);
         if (error == "") {
-            const responce = fetch(`${API_HOST}/reg`, {
+            const responce = fetch(`${API_HOST}/registration`, {
                 method: 'POST',
                 body: JSON.stringify(form)
             });
