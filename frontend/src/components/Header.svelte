@@ -1,23 +1,17 @@
 <script>
-    import { Link } from "svelte-routing";
-    import Button from "./Button.svelte";
+    import { navigate } from "svelte-routing";
     import SearchLine from "./SearchLine.svelte";
+    import Button from "./Button.svelte";
 </script>
 
 
 <header>
     <div class="container">
-        <Link to="/">
-            <div class="logo">NFT cats</div>
-        </Link>
+        <button class="logo" on:click={() => navigate("/")}>NFT cats</button>
         <div class="right">
             <SearchLine/>
-            <Link>
-                <Button type="accent" size="medium" text="Upload"/>
-            </Link>
-            <Link to="reg">
-                <Button type="light" size="medium" text="Account"/>
-            </Link>
+            <Button type="accent" size="medium" text="Upload" action={() => navigate("/")} />
+            <Button type="light" size="medium" text="Account" action={() => navigate("/reg")} />
         </div>
     </div>
 </header>
