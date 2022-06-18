@@ -16,6 +16,10 @@
     let login = () => {
         error = validate(form);
         if (error == "") {
+            let responce = fetch(`${API_HOST}/reg`, {
+                method: 'POST',
+                body: JSON.stringify(form)
+            });
             navigate("/");
         }
     }
