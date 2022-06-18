@@ -13,25 +13,23 @@
         password: "",
         repeatPassword: ""
     };
-    let answer = []
 
     let login = async () => {
         error = validate(form);
         if (error == "") {
-
             const responce = await fetch(`${API_HOST}/registration`, {
                 method: 'POST', 
-                headers: { 
-                    'Content-Type' : 
-                    'application/json'
-                },
-
+                headers: { 'Content-Type' : 'application/json' },
                 body: JSON.stringify(form)
             });
-            alert('gsdgsd');
+
             const answer = await responce.json();
-            alert(JSON.stringify(answer));
-            navigate("/");
+            if (answer.answer === "loginError") {
+                error = "Login is already taken!";
+            } else if (answer.answer === "emailError") {
+                error = "Email is already taken!";
+            } else if (answer.answer === "done")
+                navigate("/");
         }
     }
 </script>
