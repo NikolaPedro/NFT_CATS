@@ -11,18 +11,9 @@
 <Router>
     <Header/>
     <main>
-        <Route path="/">
-            <StorePage/>
-        </Route>
-        <Route path="/regestration">
-            <RegPage/>
-        </Route>
-        <Route path="/authorization">
-            <AuthPage/>
-        </Route>
-        <Route path="/profile">
-            <StorePage/>
-        </Route>
+        <Route path="reg" component={RegPage} />
+        <Route path="auth" component={AuthPage} />
+        <Route path="/" component={StorePage} />
     </main>
     <Footer/>
 </Router>
