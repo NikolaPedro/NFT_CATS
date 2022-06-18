@@ -45,10 +45,10 @@ def json_register():
     new_user = User(email = request_data['email'], username = request_data['login'])
     new_user.set_password(request_data['password'])
     new_user.check_password(request_data['repeatPassword'])
-    if(new_user.check_email(request_data['email']) == False):
-        return jsonify({"answer" : "emailError"})
-    if(new_user.check_username(request_data['username']) == False):
+    if(User.query.filter_by(username = request_data['login']).first() is not None):
         return jsonify({"answer" : "loginError"})
+    if(User.query.filter_by(email = request_data['email']).first() is not None):
+        return jsonify({"answer" : "emailError"})
     db.session.add(new_user)
     db.session.commit()
     return jsonify({"answer" : "done"})
