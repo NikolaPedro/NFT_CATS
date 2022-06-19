@@ -1,19 +1,42 @@
 <script>
     import { navigate } from "svelte-routing";
     import Button from "../../components/Button.svelte";
+    import { account } from "../../stores/stores.js";
 
     let login = "";
     let password = "";
     let maxlength = 30;
+
+    let error = "";
+
+    let auth = async () => {
+        if (error == "") {
+            const responce = await fetch(`${API_HOST}/auth`, {
+                method: 'POST', 
+                headers: { 'Content-Type' : 'application/json' },
+                body: JSON.stringify({ login: login, password: password })
+            });
+            const { answer } = await responce.json();
+            if (answer === "loginError") {
+                error = "User with this name does not exist!";
+            } else if (answer === "emailError") {
+                error = "Wrong password!";
+            } else if (answer === "done") {
+                $account = login;
+                navigate("/");
+            }
+        }
+    };
 </script>
 
 
 <div class="container">
     <form>
+        <div class="error">{error}</div>
         <input type="text" placeholder="Login" {maxlength} bind:value={login}>
         <input type="password" placeholder="Password" {maxlength} bind:value={password}>
         <button class="auth-button" on:click={() => navigate("/reg")}>Don't have an account?</button>
-        <Button type="accent" size="big" text="Login" action={() => navigate("/")} />
+        <Button type="accent" size="big" text="Login" action={auth} />
     </form>
 </div>
 
@@ -56,5 +79,12 @@
     
     .auth-button:hover {
         color: var(--color-primary);
+    }
+
+    .error {
+        margin: 10px;
+        color: var(--color-error);
+        font-size: 16px;
+        font-weight: 500;
     }
 </style>
