@@ -3,6 +3,7 @@
     import { productID } from "../../stores/stores.js";
     import Button from "../../components/Button.svelte";
     import { API_HOST } from "../../utils/api.js";
+    import { navigate } from "svelte-routing";
 
     let product = {
         name: "Best Product Name",
@@ -19,8 +20,9 @@
         product = await responce.json();
     });
 
-    let buy = () => {
-        
+    let buy = async () => {
+        const responce = await fetch(`${API_HOST}/buy/${$productID}`);
+        navigate("/profile");
     };
 </script>
 
@@ -31,7 +33,7 @@
         <div class="info">
             <div class="title">{product.name}</div>
             <div class="author">
-                <!-- <img src={product.authorImagePath} alt=""> -->
+                <img src={product.authorImagePath} alt="">
                 <div class="author-name">{product.authorName}</div>
             </div>
             <p class="description">{product.description}</p>
