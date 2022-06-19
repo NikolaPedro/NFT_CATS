@@ -1,15 +1,11 @@
-from turtle import done
-from flask import flash, redirect, render_template, request, url_for, jsonify
+from flask import flash, redirect, render_template, request, send_file, url_for, jsonify
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
-from models import User, NFT
-from sqlalchemy.orm import Session
+from sqlalchemy import update
+from models import User, NFT, photo_processing
 import secrets
-from werkzeug.security import generate_password_hash
-import os
 from forms import LoginForm, RegisterForm, UpdateAccountForm, NftForm, RequestResetForm, ResetPasswordForm
 from App import app, db, login_manager, mail
-
 
 @app.route("/")
 def home():
@@ -70,10 +66,18 @@ def get_current():
 @app.route("/store")
 def shop():
     page = request.args.get('page', 1, type = int)
-    nfts = NFT.query.all()[(page-1) * 2: page * 2]
+    nfts = NFT.query.order_by(NFT.date_creator.desc()).all()[(page-1) * 2: page * 2]
     return jsonify(nfts)
     ##nfts = NFT.query.order_by(NFT.date_creator.desc()).paginate(page = page, per_page = 1)
     ##return render_template('store.html', nfts = nfts)
+
+
+@app.route("/store/image/<int:id>" , methods = ['GET'])
+def store_image(id):
+    request_data = request.get_json()
+    nfts = NFT.query.filter_by(id = request_data["id"]).fist()
+    image =  url_for('static', filename = 'img/' + nfts.productImage)
+    return send_file('templates' + image, mimetype="image/jpg")
 
 
 @app.route("/store/count")
@@ -88,36 +92,37 @@ def logout():
     return redirect(url_for('home'))
 
 
-def save_picture(form_picture):
-    random_hex = secrets.token_hex(8)
-    _, file_ext = os.path.splitext(form_picture.filename)
-    picture_fn = random_hex + file_ext
-    picture_path = os.path.join(app.root_path, 'static/img', picture_fn)
-    form_picture.save(picture_path)
+# def save_picture(form_picture):
+#     random_hex = secrets.token_hex(8)
+#     _, file_ext = os.path.splitext(form_picture.filename)
+#     picture_fn = random_hex + file_ext
+#     picture_path = os.path.join(app.root_path, 'static/img', picture_fn)
+#     form_picture.save(picture_path)
 
-    return picture_fn
+#     return picture_fn
 
 
 @app.route("/settings", methods = ['POST','GET'])
 @login_required
 def account():
 
-    request_data = request.get_json()
+    form = request.form
+    form_image = request.files["image"]
     if request.method == 'POST':
-        if(request_data['id'] is not None):
-            picture_file = save_picture(request_data['accountImage'])
-            reload_user = User.query[request_data['id']](username = request_data['username'], general_information = request_data['generalInformation'], image_file = picture_file)
-            db.session.commit(reload_user)
-            return jsonify({"answer" : "done"})
-        else:
-            return redirect(url_for('json_login'))
+        # picture_file = save_picture(form_image['accountImage'])
+        reload_user = User.query.filter_by(username = form["username"]).first()
+        reload_user.imag_name = photo_processing(form_image)
+        reload_user.general_information = form["description"]
+        db.session.commit()
+        return jsonify({"answer" : "done"})
     elif request.method == 'GET':
         return jsonify({
             "username" : reload_user.username,
             "email" : reload_user.email,
-            "accountImage" : reload_user.image_file,
+            "accountImage" : reload_user.img_name,
             "generalInformation" : reload_user.general_information
         })
+
 
     # form = UpdateAccountForm()
     # if form.validate_on_submit():
@@ -138,30 +143,28 @@ def account():
     # return render_template('settings.html', title = 'Account', image_file = image_file, form_account = form)
 
 
-@app.route("/nft/new", methods = ['POST', 'GET'])
-@login_required
+@app.route("/upload", methods = ['POST'])
 def new_nft():
-    request_data = request.get_json()
-    if (request_data['id'] is not None):
-        new_nft = NFT(productImage = request_data['productImage'], productName = request_data['productName'], description = request_data['discription'],
-        price = request_data['price'], authorName = request_data['id'], ownerName = request_data['id'])
-        if(NFT.query.filter_by(productName = request_data['productName']).first() is not None):
-            return jsonify({"answer" : "productNameError"})
-        db.session.add(new_nft)
-        db.session.commit()
-        return jsonify({"answer":"done"})
-    else:
-        return redirect(url_for('json_login'))
-    # form = NftForm()
-    # if form.validate_on_submit():
-    #     nft = NFT(image_file = form.picture.data, name = form.name.data,description = form.description.data,
-    #     price = form.price.data, creator = current_user, owner = current_user)
-    #     db.session.add(nft)
-    #     db.session.commit()
-    #     return redirect(url_for('shop'))
-    # return render_template('create_nft.html', title = 'New NFT', form_nft = form)
 
+    if(len(list(request.files.lists())) == 0):
+        return jsonify({"answer" : "imageError"})
 
+    form = request.form
+    form_image = request.files["image"]
+
+    if(len(form["name"]) < 5):
+        return jsonify({"answer" : "nameError"})
+
+    if(float(form["price"]) < 0):
+        return jsonify({"answer" : "priceError"})
+
+    author = User.query.filter_by(username = form["authorName"]).first()
+    new_nft = NFT(productImage = photo_processing(form_image), productName = form["name"], description = form['description'],
+    price = form['price'], authorName = author, ownerName = author)
+
+    db.session.add(new_nft)
+    db.session.commit()
+    return jsonify({"answer":"done"})
 
 @app.route("/store/<int:nft_id>", methods = ['GET'])
 def nft(nft_id): # может быть ты json-ом будешь кидать мне id nft?

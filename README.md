@@ -2,7 +2,11 @@
 
 # Description of the site
 
+Since ancient times, people on the Internet have loved to look at cats, pictures with them gain millions of likes on various social networks. There are many different memes with cats, the authors and pets of which remain in the shadows. Or you could face the problem that you can't find new pictures with cats. NFT Cats offers to solve these problems.
 
+If you are the author of a meme with a cat, or you have a beautiful photo of your cat, you can post your photo card on NFT Cats thereby turning it into an NFT, that is, you will have the opportunity to monetize your pictures with cats.
+
+If you like to collect a collection of photos with cats, then you can buy the original of any picture on NFT Cats and become a NFT collector of cats.
 
 # Create environment
 
