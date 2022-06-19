@@ -1,17 +1,22 @@
 <script>
-    import { Link } from "svelte-routing";
+    import { navigate } from "svelte-routing";
+    import { productID } from "../../stores/stores.js";
 
     export let id = 0;
     export let productName = "productName";
-    export let productImage = "";
+    // export let productImage = "";
     export let authorName = "authorName";
     // export let authorImage = "";
     export let price = 999;
+
+    let transition = () => {
+        $productID = id;
+        navigate(`/store/${id}`);
+    };
 </script>
 
 
-<Link to='/store/{id}'>
-    <div class="container">
+<button on:click={transition}>
         <div class="img"></div>
         <!-- <img src={image_file} alt=""> -->
         <div class="info">
@@ -21,12 +26,11 @@
             </div>
             <div class="price">{price}</div>
         </div>
-    </div>
-</Link>
+</button>
 
 
 <style>
-    .container {
+    button {
         display: flex;
         flex-direction: column;
         padding: 14px 14px 16px 14px;
@@ -46,6 +50,12 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .names {
+        display: flex;
+        flex-direction: column;
         align-items: flex-start;
     }
 
