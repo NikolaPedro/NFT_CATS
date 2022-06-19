@@ -22,14 +22,14 @@
                 headers: { 'Content-Type' : 'application/json' },
                 body: JSON.stringify(form)
             });
-
             const { answer } = await responce.json();
             if (answer === "loginError") {
                 error = "Login is already taken!";
             } else if (answer === "emailError") {
                 error = "Email is already taken!";
-            } else if (answer === "done")
+            } else if (answer === "done") {
                 navigate("/auth");  
+            }
         }
     }
 </script>

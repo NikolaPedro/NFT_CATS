@@ -31,20 +31,6 @@ class User(db.Model, UserMixin):
         return User.query.get(user_id)
 
 
-    def check_email(email):
-        if(User.query.filter_by(email = email).first()):
-            return true
-        else:
-            return false
-
-
-    def check_username(username):
-        if(User.query.filter_by(username = username).first()):
-            return true
-        else:
-            return false
-
-
     def set_password(self, password):
         self.password = generate_password_hash(password, method="pbkdf2:sha256", salt_length = 32)
 
