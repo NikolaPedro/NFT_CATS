@@ -2,6 +2,20 @@
     import { navigate } from "svelte-routing";
     import SearchLine from "./SearchLine.svelte";
     import Button from "./Button.svelte";
+    import { account } from "../stores/stores.js";
+
+    let uploadAction = () => {
+        if ($account != "") {
+            navigate("/upload");
+        } 
+    };
+    let accountAction = () => {
+        if ($account != "") {
+            navigate("/account");
+        } else {
+            navigate("/auth");
+        }
+    };
 </script>
 
 
@@ -10,8 +24,8 @@
         <button class="logo" on:click={() => navigate("/")}>NFT cats</button>
         <div class="right">
             <SearchLine/>
-            <Button type="accent" size="medium" text="Upload" action={() => navigate("/")} />
-            <Button type="light" size="medium" text="Account" action={() => navigate("/reg")} />
+            <Button type="accent" size="medium" text="Upload" disabled={$account == ""} action={uploadAction} />
+            <Button type="light" size="medium" text="Account" action={accountAction} />
         </div>
     </div>
 </header>
