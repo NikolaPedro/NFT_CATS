@@ -2,6 +2,7 @@
     import { navigate } from "svelte-routing";
     import Button from "../../components/Button.svelte";
     import { account } from "../../stores/stores.js";
+    import { API_HOST } from "../../utils/api.js";
 
     let login = "";
     let password = "";
@@ -19,7 +20,7 @@
             const { answer } = await responce.json();
             if (answer === "loginError") {
                 error = "User with this name does not exist!";
-            } else if (answer === "emailError") {
+            } else if (answer === "passwordError") {
                 error = "Wrong password!";
             } else if (answer === "done") {
                 $account = login;
