@@ -21,11 +21,11 @@ def load_user(id):
     return User.query.get(int(id))
 
 
-@app.route("/login", methods = ['POST'])
+@app.route("/auth", methods = ['POST'])
 def json_login():
     request_data = request.get_json()
     user = User.query.filter_by(username = request_data['login']).first()
-    if(user is not None):
+    if(user is None):
         return jsonify({"answer" : "loginError"})
     if(user.check_password(request_data['password']) is not True):
         return jsonify({"answer" : "passwordError"})
@@ -163,17 +163,16 @@ def new_nft():
 
 
 
-@app.route("/store/<int:nft_id>")
-@login_required
+@app.route("/store/<int:nft_id>", methods = ['GET'])
 def nft(nft_id): # может быть ты json-ом будешь кидать мне id nft?
-    nft = NFT.query()
     nft = NFT.query.get_or_404(nft_id)
     return jsonify({
-        "productImage" : nft.productImage,
-        "productName" : nft.productName,
+        "imagePath" : nft.productImage,
+        "name" : nft.productName,
         "description" : nft.description,
         "price" : nft.price,
-        "authorName" : nft.authorName
+        "authorName" : nft.authorName.username,
+        "authorImagePath" : ""
     })
     # nft = NFT.query.get_or_404(nft_id)
     # return render_template('nft.html', title = nft.name, nft = nft)
@@ -224,6 +223,7 @@ def reset_token(token):
         db.session.commit()
         return redirect(url_for('login'))
     return render_template('reset_token.html', title = 'Reset Password', form_reset_token = form)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
