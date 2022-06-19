@@ -1,12 +1,13 @@
 <script>
     export let type = "light";
     export let size = "medium";
+    export let disabled = false;
     export let text = "button";
     export let action;
 </script>
 
 
-<button class={type + " " + size} on:click|preventDefault={action}>{text}</button>
+<button class={type + " " + size} {disabled} on:click|preventDefault={action}>{text}</button>
 
 
 <style>
@@ -47,5 +48,12 @@
         border: 2px solid var(--color-primary);
         background-color: var(--color-primary);
         color: var(--color-neutral-1);
+    }
+
+    .accent:disabled {
+        border: 2px solid var(--color-secondary);
+        background-color: var(--color-secondary);
+        color: var(--color-neutral-3);
+        cursor: not-allowed;
     }
 </style>

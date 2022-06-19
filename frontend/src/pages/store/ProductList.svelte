@@ -13,9 +13,9 @@
             products = await res.json();
         } catch (error) {
             products = [
-                { id: 0, productName: "BEER", productImage: "", authorName: "Pedro", price: 75.7},
-                { id: 1, productName: "VODKA", productImage: "", authorName: "Pedro", price: 34.2},
-                { id: 2, productName: "GAYBOY", productImage: "", authorName: "Roma", price: 332.99}
+                { id: 1, productName: "BEER", productImage: "", authorName: "Pedro", price: 75.7},
+                { id: 2, productName: "VODKA", productImage: "", authorName: "Pedro", price: 34.2},
+                { id: 3, productName: "GAMEBOY", productImage: "", authorName: "Roma", price: 332.99}
             ];
         }
         
