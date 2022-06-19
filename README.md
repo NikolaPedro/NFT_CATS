@@ -1,5 +1,9 @@
 # NFT_CATS
 
+# Description of the site
+
+
+
 # Create environment
 
 Install in the project folder backend
@@ -39,6 +43,7 @@ python -m pip install flask-sqlalchemy
 python -m pip install flask-login     
 python -m pip install flask-mail
 python -m pip install flask-wtf
+python -m pip install flask-cors
 pip uninstall itsdangerous
 pip install itsdangerous==2.0.0
 pip install email_validator
@@ -47,7 +52,7 @@ pip install mysqlclient
 
 # Launch backend
 
-To run backend in an activated environment, write this command:
+To start the backend in the backend folder, write this command:
 
 ```bash
 python main.py
@@ -67,7 +72,7 @@ npm install
 
 # Launch frontend
 
-To run frontend in an activated environment, write this command:
+To start the frontend in the frontend folder, write this command:
 
 ```bash
 npm run def
