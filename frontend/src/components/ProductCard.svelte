@@ -1,6 +1,6 @@
 <script>
     import { navigate } from "svelte-routing";
-    import { productID } from "../../stores/stores.js";
+    import { productID } from "../stores/stores.js";
 
     export let id = 0;
     export let productName = "productName";

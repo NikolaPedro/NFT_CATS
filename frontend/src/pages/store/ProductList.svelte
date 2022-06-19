@@ -1,7 +1,7 @@
 <script>
     import { API_HOST } from "../../utils/api.js"
     import { onMount } from "svelte/internal";
-    import ProductCard from "./ProductCard.svelte";
+    import ProductCard from "../../components/ProductCard.svelte";
 
     export let pageNumber = 1;
 

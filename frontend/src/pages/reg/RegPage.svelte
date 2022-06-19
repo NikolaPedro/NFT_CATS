@@ -43,7 +43,7 @@
         <input type="password" placeholder="Password" {maxlength} bind:value={form.password}>
         <input type="password" placeholder="Repeat password" {maxlength} bind:value={form.repeatPassword}>
         <button class="auth-button" on:click={() => navigate("/auth")}>Already have an account?</button>
-        <Button type="accent" size="big" text="Sing up" action={login}/>
+        <Button type="accent" size="big" text="Sing up" action={login} />
     </form>
 </div>
 
