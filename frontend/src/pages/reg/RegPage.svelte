@@ -29,7 +29,7 @@
             } else if (answer.answer === "emailError") {
                 error = "Email is already taken!";
             } else if (answer.answer === "done")
-                navigate("/");
+                navigate("/auth");  
         }
     }
 </script>
