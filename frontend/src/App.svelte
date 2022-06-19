@@ -4,6 +4,7 @@
     import RegPage from "./pages/reg/RegPage.svelte";
     import AuthPage from "./pages/auth/AuthPage.svelte";
     import ProductPage from "./pages/product/ProductPage.svelte";
+    import UploadPage from "./pages/upload/UploadPage.svelte";
     import Header from "./components/Header.svelte";
     import Footer from "./components/Footer.svelte";
 </script>
@@ -15,6 +16,7 @@
         <Route path="/" component={StorePage} />
         <Route path="/reg" component={RegPage} />
         <Route path="/auth" component={AuthPage} />
+        <Route path="/upload" component={UploadPage} />
         <Route path="/store/:id" component={ProductPage} />
     </main>
     <Footer/>
