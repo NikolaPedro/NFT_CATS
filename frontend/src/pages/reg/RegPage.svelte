@@ -23,12 +23,12 @@
                 body: JSON.stringify(form)
             });
 
-            const answer = await responce.json();
-            if (answer.answer === "loginError") {
+            const { answer } = await responce.json();
+            if (answer === "loginError") {
                 error = "Login is already taken!";
-            } else if (answer.answer === "emailError") {
+            } else if (answer === "emailError") {
                 error = "Email is already taken!";
-            } else if (answer.answer === "done")
+            } else if (answer === "done")
                 navigate("/auth");  
         }
     }
