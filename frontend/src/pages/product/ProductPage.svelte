@@ -63,6 +63,7 @@
         flex-direction: column;
         padding: 0px 10px 0px 30px;
         max-width: 500px;
+        min-width: 300px;
     }
 
     .image {
