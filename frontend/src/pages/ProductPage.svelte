@@ -1,90 +1,92 @@
 <script>
     import { onMount } from "svelte/internal";
-    import { productID } from "../stores/stores.js";
-    import Button from "../components/Button.svelte";
-    import { API_HOST } from "../utils/api.js";
     import { navigate } from "svelte-routing";
+    import { getProductData } from "../utils/api";
+    import Button from "../components/Button.svelte";
 
-    let product = {
-        name: "Best Product Name",
-        imagePath: "",
-        price: 16.9,
-        description: `But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. 
-        No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful.`,
-        authorName: "Nikola Pedro",
-        authorImagePath: ""
-    };
+    export let id = 1;
+    let product = {};
 
     onMount(async () => {
-        const responce = await fetch(`${API_HOST}/store/${$productID}`);
-        product = await responce.json();
+        product = getProductData(id);
     });
 
     let buy = async () => {
-        const responce = await fetch(`${API_HOST}/buy/${$productID}`);
+        // fetch for buy product
         navigate("/profile");
     };
 </script>
 
 
 <div class="container">
-    <section class="block">
-        <img src={product.imagePath} alt="" class="image">
-        <div class="info">
-            <div class="title">{product.name}</div>
-            <div class="author">
-                <img src={product.authorImagePath} alt="">
-                <div class="author-name">{product.authorName}</div>
-            </div>
-            <p class="description">{product.description}</p>
-            <div class="end">
-                <div class="price">{product.price + " ETH"}</div>
-                <Button type="light" size="big" text="Buy" action={buy} />
-            </div>
+    <img src={product.imagePath} alt="" class="image" />
+    <div class="block">
+        <div class="name">{product.name}</div>
+        <button class="author" on:click={() => navigate(`/users/id=${product.authorId}`)}>
+            <img src={product.authorImagePath} alt="" class="author-image">
+            <div class="author-name">{product.authorName}</div>
+        </button>
+        <p class="description">{product.description}</p>
+        <div class="end">
+            <div class="price">{product.price + " ETH"}</div>
+            <Button type="light" size="big" text="Buy" action={buy} />
         </div>
-    </section>
+    </div>
 </div>
 
 
 <style>
     .container {
         display: flex;
-        justify-content: center;
-        align-items: center;
+        flex-direction: row;
+        justify-content: stretch;
+        border: 2px solid var(--color-neutral-2);
+        border-radius: 20px;
+        margin: 60px auto;
+        max-width: 1000px;
+        padding: 30px;
+        gap: 20px;
     }
 
     .block {
-        border: 2px solid var(--color-neutral-2);
-        border-radius: 20px;
-        display: flex;
-        padding: 30px;
-        margin: 60px 0px;
-    }
-
-    .info {
         display: flex;
         flex-direction: column;
-        padding: 0px 10px 0px 30px;
-        max-width: 500px;
-        min-width: 300px;
+        align-items: center;
+        flex-grow: 1;
     }
 
     .image {
         height: 400px;
         width: 400px;
     }
-
-    .title {
+    
+    .name {
         color: var(--color-neutral-6);
         font-size: 24px;
         font-weight: 700;
     }
 
     .author {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
         color: var(--color-neutral-6);
         font-size: 16px;
         font-weight: 500;
         margin-bottom: 16px;
+        align-self: flex-start;
+        gap: 12px;
+    }
+
+    .author-image {
+        height: 30px;
+        width: 30px;
+    }
+
+    .author-name {
+        color: var(--color-neutral-6);
+        font-size: 18px;
+        font-weight: 500;
     }
 
     .description {
@@ -92,10 +94,15 @@
         font-size: 16px;
         font-weight: 400;
         white-space: pre-line;
+        align-self: flex-start;
     }
 
     .end {
-        margin: auto auto 0px auto;
+        margin: auto;
+        margin-bottom: 0px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .price {
@@ -106,6 +113,5 @@
         padding: 4px 6px;
         border: 3px solid var(--color-success);
         margin-bottom: 10px;
-        text-align: center;
     }
 </style>
