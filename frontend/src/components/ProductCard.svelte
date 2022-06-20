@@ -1,30 +1,16 @@
 <script>
     import { navigate } from "svelte-routing";
-    import { productID } from "../stores/stores.js";
 
-    export let id = 0;
-    export let productName = "productName";
-    // export let productImage = "";
-    export let authorName = "authorName";
-    // export let authorImage = "";
-    export let price = 999;
-
-    let transition = () => {
-        $productID = id;
-        navigate(`/store/${id}`);
-    };
+    let product = {};
 </script>
 
 
-<button on:click={transition}>
-        <div class="img"></div>
-        <!-- <img src={image_file} alt=""> -->
+<button on:click={() => navigate(`/store/${product.id}`)}>
+        <img src={product.productImage} alt="" />
         <div class="info">
-            <div class="names">
-                <div class="product-name">{productName}</div>
-                <div class="author-name">{authorName}</div>
-            </div>
-            <div class="price">{price}</div>
+            <div class="name">Значения из числовых input элементов автоматически приводятся к нужному типу</div>
+            <!-- <div class="name">{product.productName}</div> -->
+            <div class="price">{product.price}</div>
         </div>
 </button>
 
@@ -33,13 +19,12 @@
     button {
         display: flex;
         flex-direction: column;
-        padding: 14px 14px 16px 14px;
+        padding: 16px;
         border-radius: 20px;
         border: 2px solid var(--color-neutral-2);
-        gap: 16px;
     }
 
-    .img {
+    img {
         background-color: aquamarine;
         width: 237px;
         height: 237px;
@@ -50,31 +35,20 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        align-items: flex-start;
+        align-items: center;
+        padding-top: 16px;
     }
 
-    .names {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .product-name {
+    .name {
         color: var(--color-neutral-6);
         font-size: 16px;
         font-weight: 700;
     }
 
-    .author-name {
-        font-size: 12px;
-        font-weight: 500;
-        color: var(--color-neutral-6);
-    }
-
     .price {
+        color: var(--color-success);
         font-size: 12px;
         font-weight: 500;
-        color: var(--color-success);
         border-radius: 4px; 
         padding: 4px 6px;
         border: 2px solid var(--color-success);
