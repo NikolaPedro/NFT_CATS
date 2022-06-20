@@ -51,9 +51,9 @@
     }
 
     .accent:disabled {
-        border: 2px solid var(--color-secondary);
-        background-color: var(--color-secondary);
-        color: var(--color-neutral-3);
+        border: 2px solid var(--color-error);
+        background-color: var(--color-error);
+        color: var(--color-neutral-1);
         cursor: not-allowed;
     }
 </style>

@@ -51,6 +51,7 @@
         flex-direction: row;
         justify-content: space-between;
         align-items: flex-start;
+        width: 100%;
     }
 
     .names {

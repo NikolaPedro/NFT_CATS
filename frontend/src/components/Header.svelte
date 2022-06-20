@@ -21,7 +21,7 @@
 
 <header>
     <div class="container">
-        <button class="logo" on:click={() => navigate("/")}>NFT cats</button>
+        <button class="logo" on:click={() => navigate("/")}>NFT Сats</button>
         <div class="right">
             <SearchLine/>
             <Button type="accent" size="medium" text="Upload" disabled={$account == ""} action={uploadAction} />
