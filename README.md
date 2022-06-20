@@ -10,7 +10,8 @@ If you like to collect a collection of photos with cats, then you can buy the or
 
 # Create environment
 
-Install in the project folder backend
+Install in the project folder NFT_CATS
+
 
 # linux
 ```bash 
