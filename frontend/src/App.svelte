@@ -14,9 +14,8 @@
 <Router>
     <Header/>
     <main>
-
+        <!-- <Route path="/" component={ProfilePage} /> -->
         <Route path="/" component={StorePage} />
-        <!-- <Route path="/" component={StorePage} /> -->
         <Route path="/reg" component={RegPage} />
         <Route path="/auth" component={AuthPage} />
         <Route path="/upload" component={UploadPage} />

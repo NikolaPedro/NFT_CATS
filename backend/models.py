@@ -1,11 +1,11 @@
 from datetime import datetime
 from xml.dom import ValidationErr
-from flask import jsonify
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask_login import UserMixin
 from dataclasses import dataclass
-from sqlalchemy import false, true
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
+import os
 from App import db, app
 
 @dataclass
@@ -14,8 +14,10 @@ class User(db.Model, UserMixin):
     email : str = db.Column(db.String(150), unique = True, nullable = False)
     username : str = db.Column(db.String(50), unique = True, nullable = False)
     password : str = db.Column(db.String(150), nullable = False)
-    image_file : str = db.Column(db.String(30), nullable = False, default = 'default.jpg')
+    img_name : str = db.Column(db.String(50))
+    img_data : str = db.Column(db.LargeBinary)
     general_information : str = db.Column(db.String(200), nullable = True)
+
 
     def get_reset_token(self, expires_sec=300):
         s = Serializer(app.config['SECRET_KEY'], expires_sec)
@@ -47,7 +49,7 @@ class User(db.Model, UserMixin):
 @dataclass
 class NFT(db.Model):
     id : int = db.Column(db.Integer, primary_key = True)
-    productImage : str = db.Column(db.String(50), nullable = True)
+    productImage : str = db.Column(db.Text, nullable = False)
     productName : str = db.Column(db.String(50), nullable = False, unique = True)
     description : str = db.Column(db.Text, nullable = False)
     price : float = db.Column(db.Float(30), nullable = False)
@@ -56,4 +58,10 @@ class NFT(db.Model):
     ownerName_id : int = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
     authorName = db.relationship("User", foreign_keys = [authorName_id], backref = 'creator', lazy = True)
     ownerName = db.relationship("User", foreign_keys = [ownerName_id], backref = 'owner', lazy = True)
+
+
+
+def photo_processing(form_image):
+    filename = secure_filename(form_image.filename)
+    return form_image.save(os.path.join('templates/static/img', filename))
 

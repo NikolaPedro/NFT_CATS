@@ -106,5 +106,6 @@
         padding: 4px 6px;
         border: 3px solid var(--color-success);
         margin-bottom: 10px;
+        text-align: center;
     }
 </style>

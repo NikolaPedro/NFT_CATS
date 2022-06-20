@@ -22,7 +22,7 @@
     let upload = async () => {
         form.image = files[0];
         let formData = new FormData();
-        for (property in form) {
+        for (let property in form) {
             formData.append(property, form[property]);
         }
         const responce = await fetch(`${API_HOST}/upload`, {

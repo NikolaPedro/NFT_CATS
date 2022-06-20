@@ -2,3 +2,4 @@
 node_modules
 frontend/public/build
 .venv
+.idea
