@@ -1,0 +1,17 @@
+{
+    "product": {
+        "id": 0,
+        "name": "",
+        "image": "",
+        "authorName": "",
+        "authorImage": "",
+        "description": "",
+        "price": 0
+    },
+    "user": {
+        "id": 0,
+        "name": "",
+        "email": "",
+        "image": ""
+    }
+}

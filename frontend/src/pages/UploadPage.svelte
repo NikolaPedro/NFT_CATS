@@ -1,8 +1,8 @@
 <script>
-    import Button from "../../components/Button.svelte";
+    import Button from "../components/Button.svelte";
     import { navigate } from "svelte-routing";
-    import { account } from "../../stores/stores.js";
-    import { API_HOST } from "../../utils/api.js";
+    import { account } from "../stores/stores.js";
+    import { API_HOST } from "../utils/api.js";
 
     let form = {
         name: "",
@@ -22,7 +22,7 @@
     let upload = async () => {
         form.image = files[0];
         let formData = new FormData();
-        for (property in form) {
+        for (let property in form) {
             formData.append(property, form[property]);
         }
         const responce = await fetch(`${API_HOST}/upload`, {

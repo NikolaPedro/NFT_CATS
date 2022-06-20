@@ -1,8 +1,8 @@
 <script>
     import { onMount } from "svelte/internal";
-    import { productID } from "../../stores/stores.js";
-    import Button from "../../components/Button.svelte";
-    import { API_HOST } from "../../utils/api.js";
+    import { productID } from "../stores/stores.js";
+    import Button from "../components/Button.svelte";
+    import { API_HOST } from "../utils/api.js";
     import { navigate } from "svelte-routing";
 
     let product = {
@@ -106,5 +106,6 @@
         padding: 4px 6px;
         border: 3px solid var(--color-success);
         margin-bottom: 10px;
+        text-align: center;
     }
 </style>

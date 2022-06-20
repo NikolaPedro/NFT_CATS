@@ -6,7 +6,7 @@
 
 <style>
     .welcome {
-        height: 90vh;
+        height: 40vh;
         display: flex;
         flex-direction: column;
         justify-content: center;
