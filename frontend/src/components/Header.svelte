@@ -24,7 +24,7 @@
         <button class="logo" on:click={() => navigate("/")}>NFT Сats</button>
         <div class="right">
             <SearchLine/>
-            <Button type="accent" size="medium" text="Upload" disabled={$account == ""} action={uploadAction} />
+            <Button type="accent" size="medium" text="Upload" action={uploadAction} />
             <Button type="light" size="medium" text="Account" action={accountAction} />
         </div>
     </div>
