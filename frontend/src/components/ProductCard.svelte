@@ -1,17 +1,21 @@
 <script>
+    import { onMount } from "svelte";
     import { navigate } from "svelte-routing";
+    import { getProductData } from "../utils/api";
 
+    export let id;
     let product = {};
+
+    onMount(async() => {
+        product = await getProductData(id);
+    });
 </script>
 
 
 <button on:click={() => navigate(`/store/${product.id}`)}>
         <img src={product.productImage} alt="" />
-        <div class="info">
-            <div class="name">Значения из числовых input элементов автоматически приводятся к нужному типу</div>
-            <!-- <div class="name">{product.productName}</div> -->
-            <div class="price">{product.price}</div>
-        </div>
+        <div class="name">{product.productName}</div>
+        <div class="price">{product.price}</div>
 </button>
 
 
@@ -19,30 +23,25 @@
     button {
         display: flex;
         flex-direction: column;
+        align-items: flex-end;
         padding: 16px;
         border-radius: 20px;
         border: 2px solid var(--color-neutral-2);
     }
 
     img {
-        background-color: aquamarine;
         width: 237px;
         height: 237px;
         border-radius: 10px;
     }
 
-    .info {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        padding-top: 16px;
-    }
-
     .name {
+        width: 237px;
         color: var(--color-neutral-6);
         font-size: 16px;
         font-weight: 700;
+        text-align: left;
+        margin: 10px 0px;
     }
 
     .price {
