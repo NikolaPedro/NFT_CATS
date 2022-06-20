@@ -3,7 +3,7 @@
     import { navigate } from "svelte-routing";
     import { getProductData } from "../utils/api";
 
-    export let id;
+    export let id = 1;
     let product = {};
 
     onMount(async() => {
