@@ -1,8 +1,8 @@
 <script>
     import { onMount } from "svelte/internal";
-    import { productID } from "../../stores/stores.js";
-    import Button from "../../components/Button.svelte";
-    import { API_HOST } from "../../utils/api.js";
+    import { productID } from "../stores/stores.js";
+    import Button from "../components/Button.svelte";
+    import { API_HOST } from "../utils/api.js";
     import { navigate } from "svelte-routing";
 
     let product = {

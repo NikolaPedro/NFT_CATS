@@ -1,8 +1,8 @@
 <script>
-    import Button from "../../components/Button.svelte";
+    import Button from "../components/Button.svelte";
     import { navigate } from "svelte-routing";
-    import { account } from "../../stores/stores.js";
-    import { API_HOST } from "../../utils/api.js";
+    import { account } from "../stores/stores.js";
+    import { API_HOST } from "../utils/api.js";
 
     let form = {
         name: "",

@@ -1,43 +1,49 @@
 <script>
     import { navigate } from "svelte-routing";
-    import Button from "../../components/Button.svelte";
-    import { account } from "../../stores/stores.js";
-    import { API_HOST } from "../../utils/api.js";
+    import Button from "../components/Button.svelte";
+    import validate from "../utils/validation.js";
+    import { API_HOST } from "../utils/api";
 
-    let login = "";
-    let password = "";
-    let maxlength = 30;
+    const maxlength = 30;
 
     let error = "";
+    let form = {
+        login: "",
+        email: "",
+        password: "",
+        repeatPassword: ""
+    };
 
-    let auth = async () => {
+    let login = async () => {
+        error = validate(form);
         if (error == "") {
-            const responce = await fetch(`${API_HOST}/auth`, {
+            const responce = await fetch(`${API_HOST}/registration`, {
                 method: 'POST', 
                 headers: { 'Content-Type' : 'application/json' },
-                body: JSON.stringify({ login: login, password: password })
+                body: JSON.stringify(form)
             });
             const { answer } = await responce.json();
             if (answer === "loginError") {
-                error = "User with this name does not exist!";
-            } else if (answer === "passwordError") {
-                error = "Wrong password!";
+                error = "Login is already taken!";
+            } else if (answer === "emailError") {
+                error = "Email is already taken!";
             } else if (answer === "done") {
-                $account = login;
-                navigate("/");
+                navigate("/auth");  
             }
         }
-    };
+    }
 </script>
 
 
 <div class="container">
     <form>
         <div class="error">{error}</div>
-        <input type="text" placeholder="Login" {maxlength} bind:value={login}>
-        <input type="password" placeholder="Password" {maxlength} bind:value={password}>
-        <button class="auth-button" on:click={() => navigate("/reg")}>Don't have an account?</button>
-        <Button type="accent" size="big" text="Login" action={auth} />
+        <input type="text" placeholder="Login" {maxlength} bind:value={form.login}>
+        <input type="email" placeholder="Email" {maxlength} bind:value={form.email}>
+        <input type="password" placeholder="Password" {maxlength} bind:value={form.password}>
+        <input type="password" placeholder="Repeat password" {maxlength} bind:value={form.repeatPassword}>
+        <button class="auth-button" on:click={() => navigate("/auth")}>Already have an account?</button>
+        <Button type="accent" size="big" text="Sing up" action={login} />
     </form>
 </div>
 
