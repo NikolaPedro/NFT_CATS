@@ -1,6 +1,6 @@
 <script>
-    import Welcome from "./Welcome.svelte";
-    import ProductList from "./ProductList.svelte";
+    import Welcome from "../components/Welcome.svelte";
+    import ProductList from "../components/ProductList.svelte";
 </script>
 
 
