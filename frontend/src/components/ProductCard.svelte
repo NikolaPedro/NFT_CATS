@@ -1,20 +1,22 @@
 <script>
     import { onMount } from "svelte";
     import { navigate } from "svelte-routing";
-    import { getProductData } from "../utils/api";
+    import { getProductData, getImage } from "../utils/api";
 
-    export let id = 1;
+    export let id = 0;
     let product = {};
 
     onMount(async() => {
-        product = await getProductData(id);
+        getProductData(id)
+            .then(response => response.json())
+            .then(json => product = json);
     });
 </script>
 
 
 <button on:click={() => navigate(`/store/${product.id}`)}>
-        <img src={product.productImage} alt="" />
-        <div class="name">{product.productName}</div>
+        <img src={getImage(product.image)} alt="" />
+        <div class="name">{product.name}</div>
         <div class="price">{product.price}</div>
 </button>
 

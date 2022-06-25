@@ -17,6 +17,7 @@ class User(db.Model, UserMixin):
     img_name : str = db.Column(db.String(50))
     img_data : str = db.Column(db.LargeBinary)
     general_information : str = db.Column(db.String(200), nullable = True)
+    # verification : bool = db.Column(db.Boolean, nullable = True)
 
 
     def get_reset_token(self, expires_sec=300):
@@ -63,5 +64,6 @@ class NFT(db.Model):
 
 def photo_processing(form_image):
     filename = secure_filename(form_image.filename)
-    return form_image.save(os.path.join('templates/static/img', filename))
+    form_image.save(os.path.join('templates/static/img', filename))
+    return filename
 

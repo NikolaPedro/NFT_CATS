@@ -8,11 +8,14 @@
     let maxCount = 0;
 
     onMount(async () => {
-        maxCount = await getProductsCount();
+        getProductsCount()
+            .then(response => response.json())
+            .then(json => maxCount = json.count);
+        
         window.addEventListener("scroll", function () {
             let scrollY = listElement.offsetTop + listElement.clientHeight;
             if (scrollY > window.scrollY && products.length < maxCount) {
-                products = [...products, products.length + 1]
+                products = [...products, products.length]
             }
         });
     });

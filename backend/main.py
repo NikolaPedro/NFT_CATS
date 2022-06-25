@@ -1,11 +1,10 @@
-from flask import flash, redirect, render_template, request, send_file, url_for, jsonify
+from flask import flash, redirect, render_template, request, send_file, session, url_for, jsonify
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
-from sqlalchemy import update
+from itsdangerous import SignatureExpired
 from models import User, NFT, photo_processing
-import secrets
 from forms import LoginForm, RegisterForm, UpdateAccountForm, NftForm, RequestResetForm, ResetPasswordForm
-from App import app, db, login_manager, mail
+from App import app, db, login_manager, mail, serializer
 
 @app.route("/")
 def home():
@@ -26,20 +25,7 @@ def json_login():
     if(user.check_password(request_data['password']) is not True):
         return jsonify({"answer" : "passwordError"})
     return jsonify({"answer" : "done"})
-    # form = LoginForm()
-    # print(form.validate_on_submit())
 
-    # if current_user.is_authenticated:
-    #     return redirect(url_for('shop'))
-
-    # if form.validate_on_submit():
-    #     user = User.query.filter_by(email = form.email.data).first()
-    #     if user is not None and user.check_password(form.password.data):
-    #         login_user(user)
-    #         next = request.args.get("next")
-    #         return redirect(next or url_for('shop'))
-    #     flash('Invalid email address or Password.')
-    # return render_template('login.html', form_login = form)
 
 
 @app.route("/registration", methods = ['POST'])
@@ -52,9 +38,27 @@ def json_register():
         return jsonify({"answer" : "loginError"})
     if(User.query.filter_by(email = request_data['email']).first() is not None):
         return jsonify({"answer" : "emailError"})
+    # token = serializer.dumps(request_data['email'], salt = 'email-confirm')
+    # message = Message('Confirm Email', sender = 'ngorbunova41654@gmail.com', recipients = request_data['email'])
+    # link = url_for('verification', token = token, external = True)
+    # message.body = 'Your link is {}'.format(link)
+    # mail.send(message)
     db.session.add(new_user)
     db.session.commit()
     return jsonify({"answer" : "done"})
+
+
+# @app.route('/verification/<token>')
+# def confirm_email(token):
+#     request_data = request.get_json()
+#     user = session.query(User).get(request_data['id'])
+#     try:
+#         request_data['email'] = serializer.loads(token, salt = 'email-confirm', max_age = 120)
+#     except SignatureExpired:
+#         return jsonify({"answer" : "verificationError"})
+#     user.verification = True
+#     db.session.commit()
+#     return jsonify({"answer" : "done"})
 
 
 @app.route('/date')
@@ -63,27 +67,26 @@ def get_current():
     return jsonify(users)
 
 
-@app.route("/store")
-def shop():
-    page = request.args.get('page', 1, type = int)
-    nfts = NFT.query.order_by(NFT.date_creator.desc()).all()[(page-1) * 2: page * 2]
-    return jsonify(nfts)
-    ##nfts = NFT.query.order_by(NFT.date_creator.desc()).paginate(page = page, per_page = 1)
-    ##return render_template('store.html', nfts = nfts)
+@app.route("/store/id=<int:id>")
+def shop(id):
+    nft = NFT.query.order_by(NFT.date_creator.desc())[id]
+    product = {
+        "id" : nft.id,
+        "name" : nft.productName,
+        "image" : nft.productImage,
+        "price" : nft.price,
+        "authorName" : nft.authorName.username,
+        "authorImage" : nft.authorName.img_name, 
+        "description" : nft.description,
+        "authorId" : nft.authorName_id
+    }
+    return jsonify(product)
 
-
-@app.route("/store/image/<int:id>" , methods = ['GET'])
-def store_image(id):
-    request_data = request.get_json()
-    nfts = NFT.query.filter_by(id = request_data["id"]).fist()
-    image =  url_for('static', filename = 'img/' + nfts.productImage)
-    return send_file('templates' + image, mimetype="image/jpg")
-
-
+    
 @app.route("/store/count")
 def shop_count():
     nfts = NFT.query.count()
-    return jsonify(nfts)
+    return jsonify({"count" : nfts})
 
 
 @app.route("/logout")
@@ -92,55 +95,20 @@ def logout():
     return redirect(url_for('home'))
 
 
-# def save_picture(form_picture):
-#     random_hex = secrets.token_hex(8)
-#     _, file_ext = os.path.splitext(form_picture.filename)
-#     picture_fn = random_hex + file_ext
-#     picture_path = os.path.join(app.root_path, 'static/img', picture_fn)
-#     form_picture.save(picture_path)
-
-#     return picture_fn
-
-
 @app.route("/settings", methods = ['POST','GET'])
-@login_required
-def account():
+def account_settings():
 
     form = request.form
     form_image = request.files["image"]
+    author = User.query.filter_by(username = form["authorName"]).first()
     if request.method == 'POST':
-        # picture_file = save_picture(form_image['accountImage'])
-        reload_user = User.query.filter_by(username = form["username"]).first()
-        reload_user.imag_name = photo_processing(form_image)
-        reload_user.general_information = form["description"]
+        image = url_for('static', filename = 'img/' + photo_processing(form_image))
+        author.general_information = form["generalInformation"]
+        author.img_name = image
         db.session.commit()
         return jsonify({"answer" : "done"})
     elif request.method == 'GET':
-        return jsonify({
-            "username" : reload_user.username,
-            "email" : reload_user.email,
-            "accountImage" : reload_user.img_name,
-            "generalInformation" : reload_user.general_information
-        })
-
-
-    # form = UpdateAccountForm()
-    # if form.validate_on_submit():
-    #     if form.picture.data: 
-    #         picture_file = save_picture(form.picture.data)
-    #         current_user.image_file = picture_file
-    #     current_user.username = form.username.data
-    #     current_user.email = form.email.data
-    #     current_user.general_information = form.general_information.data
-    #     db.session.commit()
-    #     flash('your account has been update!', 'success')
-    #     return redirect(url_for('account'))
-    # elif request.method == 'GET':
-    #     form.username.data = current_user.username
-    #     form.email.data = current_user.email
-    #     form.general_information.data = current_user.general_information
-    # image_file = url_for('static', filename = 'img/' + current_user.image_file )
-    # return render_template('settings.html', title = 'Account', image_file = image_file, form_account = form)
+        return jsonify(author[form["id"]])
 
 
 @app.route("/upload", methods = ['POST'])
@@ -158,8 +126,9 @@ def new_nft():
     if(float(form["price"]) < 0):
         return jsonify({"answer" : "priceError"})
 
+    image =  url_for('static', filename = 'img/' + photo_processing(form_image))
     author = User.query.filter_by(username = form["authorName"]).first()
-    new_nft = NFT(productImage = photo_processing(form_image), productName = form["name"], description = form['description'],
+    new_nft = NFT(productImage = image, productName = form["name"], description = form['description'],
     price = form['price'], authorName = author, ownerName = author)
 
     db.session.add(new_nft)
@@ -175,7 +144,7 @@ def nft(nft_id): # может быть ты json-ом будешь кидать 
         "description" : nft.description,
         "price" : nft.price,
         "authorName" : nft.authorName.username,
-        "authorImagePath" : ""
+        "authorImagePath" : nft.authorName.img_name
     })
     # nft = NFT.query.get_or_404(nft_id)
     # return render_template('nft.html', title = nft.name, nft = nft)
