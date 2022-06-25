@@ -1,20 +1,15 @@
 <script>
     import { navigate } from "svelte-routing";
+    import { account } from "../stores/stores.js";
     import SearchLine from "./SearchLine.svelte";
     import Button from "./Button.svelte";
-    import { account } from "../stores/stores.js";
 
     let uploadAction = () => {
-        if ($account != "") {
-            navigate("/upload");
-        } 
+        navigate($account != "" ? "/upload" : "/auth");
     };
+
     let accountAction = () => {
-        if ($account != "") {
-            navigate("/account");
-        } else {
-            navigate("/auth");
-        }
+        navigate($account != "" ? "/account" : "/auth");
     };
 </script>
 
