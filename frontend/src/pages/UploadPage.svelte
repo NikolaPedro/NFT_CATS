@@ -1,19 +1,12 @@
 <script>
     import Button from "../components/Button.svelte";
     import { navigate } from "svelte-routing";
-    import { account } from "../stores/stores.js";
-    import { API_HOST } from "../utils/api.js";
+    import { uploadProduct } from "../utils/api.js";
 
-    let form = {
-        name: "",
-        authorName: $account,
-        description: "",
-        price: 0,
-        image: {}
-    };
-    const maxlength = 30;
-    let error = "";
+    let form = {};
     let files = [];
+    let error = "";
+    const maxlength = 30;
 
     $: fileName = files[0] == undefined 
         ? "Select a image" 
@@ -22,13 +15,10 @@
     let upload = async () => {
         form.image = files[0];
         let formData = new FormData();
-        for (let property in form) {
+        for (let property in form) 
             formData.append(property, form[property]);
-        }
-        const responce = await fetch(`${API_HOST}/upload`, {
-            method: 'POST', 
-            body: formData
-        });
+
+        const responce = await uploadProduct(form)
         const { answer } = await responce.json();
         if (answer === "nameError") {
             error = "Wrong name!";
