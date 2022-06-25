@@ -1,5 +1,5 @@
 <script>
-    import { onMount, onDestroy, debug } from "svelte/internal";
+    import { onMount, onDestroy } from "svelte/internal";
     import { getProductsCount } from "../utils/api";
     import ProductCard from "./ProductCard.svelte";
 
@@ -7,21 +7,28 @@
     $: products = [];
     let maxCount = 0;
 
+    function addCardWithScroll() {
+        const offset = 1400;
+        let scrollY = listElement.offsetTop + listElement.clientHeight;
+        if (scrollY < window.scrollY + offset && products.length < maxCount) {
+            products = [...products, products.length]
+        }
+    }
+
     onMount(async () => {
         getProductsCount()
             .then(response => response.json())
-            .then(json => maxCount = json.count);
+            .then(json => maxCount = json.count)
+            .catch(() => maxCount = 6); 
         
-        window.addEventListener("scroll", function () {
-            let scrollY = listElement.offsetTop + listElement.clientHeight;
-            if (scrollY > window.scrollY && products.length < maxCount) {
-                products = [...products, products.length]
-            }
-        });
+        for (let i = 0; i < 6; i++)
+            addCardWithScroll();
+        
+        window.addEventListener("scroll", addCardWithScroll);
     });
 
     onDestroy(() => {
-        window.removeEventListener("scroll");
+        window.removeEventListener("scroll", addCardWithScroll);
     });
 </script>
 
