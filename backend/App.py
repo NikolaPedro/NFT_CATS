@@ -3,8 +3,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_cors import CORS
+from itsdangerous import URLSafeTimedSerializer
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="templates/static/")
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:djdf2309865@localhost/accounts'
 db = SQLAlchemy(app)
@@ -16,5 +17,6 @@ app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'ngorbunova41654@gmail.com'
 app.config['MAIL_PASSWORD'] = 'ggof zwud nbfk heam'
+serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 mail = Mail(app)
 CORS(app)

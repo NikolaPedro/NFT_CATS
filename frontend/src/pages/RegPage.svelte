@@ -1,27 +1,17 @@
 <script>
-    import { navigate } from "svelte-routing";
     import Button from "../components/Button.svelte";
     import validate from "../utils/validation.js";
-    import { API_HOST } from "../utils/api";
+    import { navigate } from "svelte-routing";
+    import { regProfile } from "../utils/api";
 
     const maxlength = 30;
-
     let error = "";
-    let form = {
-        login: "",
-        email: "",
-        password: "",
-        repeatPassword: ""
-    };
+    let form = {};
 
     let login = async () => {
         error = validate(form);
         if (error == "") {
-            const responce = await fetch(`${API_HOST}/registration`, {
-                method: 'POST', 
-                headers: { 'Content-Type' : 'application/json' },
-                body: JSON.stringify(form)
-            });
+            const responce = await regProfile(form);
             const { answer } = await responce.json();
             if (answer === "loginError") {
                 error = "Login is already taken!";

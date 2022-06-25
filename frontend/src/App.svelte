@@ -2,7 +2,7 @@
     import { Router, Route } from "svelte-routing";
     import RegPage from "./pages/RegPage.svelte";
     import AuthPage from "./pages/AuthPage.svelte";
-    import StorePage from "./pages/store/StorePage.svelte";
+    import StorePage from "./pages/StorePage.svelte";
     import UploadPage from "./pages/UploadPage.svelte";
     import ProductPage from "./pages/ProductPage.svelte";
     import ProfilePage from "./pages/ProfilePage.svelte";

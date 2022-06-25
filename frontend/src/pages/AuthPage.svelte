@@ -1,22 +1,16 @@
 <script>
-    import { navigate } from "svelte-routing";
     import Button from "../components/Button.svelte";
     import { account } from "../stores/stores.js";
-    import { API_HOST } from "../utils/api.js";
+    import { navigate } from "svelte-routing";
+    import { authProfile } from "../utils/api.js";
 
-    let login = "";
-    let password = "";
     let maxlength = 30;
-
     let error = "";
+    let form = {};
 
     let auth = async () => {
         if (error == "") {
-            const responce = await fetch(`${API_HOST}/auth`, {
-                method: 'POST', 
-                headers: { 'Content-Type' : 'application/json' },
-                body: JSON.stringify({ login: login, password: password })
-            });
+            const responce = authProfile(form);
             const { answer } = await responce.json();
             if (answer === "loginError") {
                 error = "User with this name does not exist!";
@@ -34,8 +28,8 @@
 <div class="container">
     <form>
         <div class="error">{error}</div>
-        <input type="text" placeholder="Login" {maxlength} bind:value={login}>
-        <input type="password" placeholder="Password" {maxlength} bind:value={password}>
+        <input type="text" placeholder="Login" {maxlength} bind:value={form.login}>
+        <input type="password" placeholder="Password" {maxlength} bind:value={form.password}>
         <button class="auth-button" on:click={() => navigate("/reg")}>Don't have an account?</button>
         <Button type="accent" size="big" text="Login" action={auth} />
     </form>
