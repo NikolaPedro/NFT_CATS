@@ -1,14 +1,16 @@
 <script>
     import { onMount } from "svelte/internal";
     import { navigate } from "svelte-routing";
-    import { getProductData } from "../utils/api";
+    import { getProductData, getImage } from "../utils/api";
     import Button from "../components/Button.svelte";
 
     export let id = 1;
     let product = {};
 
     onMount(async () => {
-        product = getProductData(id);
+        getProductData(id)
+            .then(response => response.json())
+            .then(json => product = json);
     });
 
     let buy = async () => {
@@ -19,11 +21,11 @@
 
 
 <div class="container">
-    <img src={product.imagePath} alt="" class="image" />
+    <img src={getImage(product.image)} alt="" class="image" />
     <div class="block">
         <div class="name">{product.name}</div>
         <button class="author" on:click={() => navigate(`/users/id=${product.authorId}`)}>
-            <img src={product.authorImagePath} alt="" class="author-image">
+            <img src={getImage(product.authorImage)} alt="" class="author-image">
             <div class="author-name">{product.authorName}</div>
         </button>
         <p class="description">{product.description}</p>

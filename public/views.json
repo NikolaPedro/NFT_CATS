@@ -13,6 +13,7 @@
         "id": 0,
         "name": "",
         "email": "",
-        "image": ""
+        "image": "",
+        "nfts": []
     }
 }

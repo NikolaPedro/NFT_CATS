@@ -8,6 +8,10 @@ export function getProductsCount() {
     return fetch(`${API_HOST}/store/count`);
 }
 
+export function getProfileData(id) {
+    return fetch(`${API_HOST}/profile/id=${id}`);
+}
+
 export function getImage(path) {
     return API_HOST + path;
 }
