@@ -5,11 +5,11 @@
     import Button from "./Button.svelte";
 
     let uploadAction = () => {
-        navigate($account != "" ? "/upload" : "/auth");
+        navigate($account != undefined ? "/upload" : "/auth");
     };
 
     let accountAction = () => {
-        navigate($account != "" ? "/account" : "/auth");
+        navigate($account != undefined ? "/account" : "/auth");
     };
 </script>
 

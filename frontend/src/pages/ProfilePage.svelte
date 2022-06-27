@@ -1,15 +1,15 @@
 <script>
     import { onMount } from "svelte/internal";
+    import { account } from "../stores/stores";
     import { getProfileData, getImage } from "../utils/api";
     import ProductCard from "../components/ProductCard.svelte";
 
-    export let id = 1;
     let user = {
         nfts: []
     };
 
     onMount(async () => {
-        getProfileData(id)
+        getProfileData($account)
             .then(response => response.json())
             .then(json => user = json);
     });
